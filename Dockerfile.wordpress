@@ -1,0 +1,22 @@
+# Use the official WordPress image as the base
+FROM wordpress:latest
+
+ARG myWORDPRESS_DB_HOST
+ARG myWORDPRESS_DB_USER
+ARG myWORDPRESS_DB_PASSWORD
+ARG myWORDPRESS_DB_NAME
+
+# Set the database credentials for WordPress
+ENV WORDPRESS_DB_HOST=${myWORDPRESS_DB_HOST}
+ENV WORDPRESS_DB_USER=${myWORDPRESS_DB_USER}
+ENV WORDPRESS_DB_PASSWORD=${myWORDPRESS_DB_PASSWORD}
+ENV WORDPRESS_DB_NAME=${myWORDPRESS_DB_NAME}
+
+# Expose the WordPress default port
+EXPOSE 3080:80
+
+# Use a volume to persist WordPress data
+VOLUME /var/www/html/wp-content
+
+# Copy the custom configuration file to the container
+COPY custom.ini /usr/local/etc/php/conf.d/custom.ini

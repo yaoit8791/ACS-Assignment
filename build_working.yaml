@@ -1,0 +1,50 @@
+services:
+  db:
+    build:
+      context: .
+      args: 
+        myMYSQL_ROOT_PASSWORD: ${myMYSQL_ROOT_PASSWORD}
+        myMYSQL_DATABASE: ${myMYSQL_DATABASE}
+        myMYSQL_USER: ${myMYSQL_USER}
+        myMYSQL_PASSWORD: ${myMYSQL_PASSWORD}
+      dockerfile: Dockerfile.db
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    #image: mariadb:10.6.4-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${myMYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${myMYSQL_DATABASE}
+      - MYSQL_USER=${myMYSQL_USER}
+      - MYSQL_PASSWORD=${myMYSQL_PASSWORD}
+    expose:
+      - 3306
+      - 33060
+  wordpress:
+    depends_on:
+      - db
+    build:
+      context: .
+      args:
+        myWORDPRESS_DB_HOST: ${myWORDPRESS_DB_HOST}
+        myWORDPRESS_DB_USER: ${myWORDPRESS_DB_USER}
+        myWORDPRESS_DB_PASSWORD: ${myWORDPRESS_DB_PASSWORD}
+        myWORDPRESS_DB_NAME: ${myWORDPRESS_DB_NAME}
+      dockerfile: Dockerfile.wordpress
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - 3080:80
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=${myWORDPRESS_DB_HOST}
+      - WORDPRESS_DB_USER=${myWORDPRESS_DB_USER}
+      - WORDPRESS_DB_PASSWORD=${myWORDPRESS_DB_PASSWORD}
+      - WORDPRESS_DB_NAME=${myWORDPRESS_DB_NAME}
+volumes:
+  db_data:
+  wp_data:
