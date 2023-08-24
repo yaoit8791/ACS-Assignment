@@ -11,4 +11,4 @@ This repo will holds the files that are necessary for the Cloud Native Architect
    This will start run the wordpress and db container image.
 
 # Version
-1.4
+1.0
