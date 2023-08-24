@@ -1,6 +1,10 @@
 # Use the official WordPress image as the base
 FROM wordpress:latest
 
+# Install SSH server
+RUN apt-get update && apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+
 ARG myWORDPRESS_DB_HOST
 ARG myWORDPRESS_DB_USER
 ARG myWORDPRESS_DB_PASSWORD
@@ -14,9 +18,14 @@ ENV WORDPRESS_DB_NAME=${myWORDPRESS_DB_NAME}
 
 # Expose the WordPress default port
 EXPOSE 3080:80
+# Expose SSH port
+EXPOSE 22
 
 # Use a volume to persist WordPress data
 VOLUME /var/www/html/wp-content
 
 # Copy the custom configuration file to the container
 COPY custom.ini /usr/local/etc/php/conf.d/custom.ini
+
+# Start SSH server
+CMD ["/usr/sbin/sshd", "-D"]
