@@ -1,6 +1,10 @@
 # Use the official MariaDB image as the base
 FROM mariadb:10.6.4-focal
 
+# Install SSH server
+RUN apt-get update && apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+
 ARG myMYSQL_ROOT_PASSWORD
 ARG myMYSQL_DATABASE
 ARG myMYSQL_USER
@@ -19,6 +23,8 @@ ENV MYSQL_PASSWORD=${myMYSQL_PASSWORD}
 # Expose the MariaDB default port
 EXPOSE 3306
 EXPOSE 33060
+# Expose SSH port
+EXPOSE 22
 
 # Use a volume to persist MariaDB data
 VOLUME /var/lib/mysql
@@ -28,3 +34,5 @@ COPY custom.cnf /etc/mysql/conf.d/custom.cnf
 
 # Start MariaDB service
 CMD ["mysqld"]
+# Start SSH server
+CMD ["/usr/sbin/sshd", "-D"]
