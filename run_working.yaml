@@ -1,6 +1,6 @@
 services:
   db:
-    image: yaoit8791/cna-assignment:db
+    image: yaoit8791/acs-assignment:db
     # We use a mariadb image which supports both amd64 & arm64 architecture
     #image: mariadb:10.6.4-focal
     # If you really want to use MySQL, uncomment the following line
@@ -27,7 +27,7 @@ services:
   wordpress:
     depends_on:
       - db
-    image: yaoit8791/cna-assignment:wordpress
+    image: yaoit8791/acs-assignment:wordpress
     #image: <dockerhub_username>/<repository_name>:wordpress
     #args:
     #  myMYORDPRESS_DB_HOST: ${myWORDPRESS_DB_HOST}
