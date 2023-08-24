@@ -24,6 +24,7 @@ services:
     expose:
       - 3306
       - 33060
+      - 22
   wordpress:
     depends_on:
       - db
@@ -39,6 +40,7 @@ services:
       - wp_data:/var/www/html
     ports:
       - 3080:80
+      - 22
     restart: always
     environment:
       - WORDPRESS_DB_HOST=${myWORDPRESS_DB_HOST}
