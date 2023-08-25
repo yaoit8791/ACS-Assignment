@@ -1,0 +1,11 @@
+- name: Install Sec Patches on Debian Server
+  hosts: wordpress
+  tasks:
+  - name: DEBIAN | Install updates
+    apt:
+     update_cache: yes
+     cache_valid_time: 7200
+     force_apt_get: true
+     name: "*"
+     state: latest
+    when: "ansible_os_family == 'Debian'"
